@@ -41,7 +41,7 @@ def scrape_list(url)
       source: mp_url,
     }
     data[:party_id] = data[:party]
-    data[:constituency].sub(/ C\*?/, ' Central')
+    data[:constituency].sub!(/ C\*?$/, ' Central')
     data[:executive] = '' if data[:executive] == 'Backbencher'
     puts data
     ScraperWiki.save_sqlite([:id, :term], data)
