@@ -1,25 +1,61 @@
-# This is a template for a Ruby scraper on morph.io (https://morph.io)
-# including some code snippets below that you should find helpful
+#!/bin/env ruby
+# encoding: utf-8
 
-# require 'scraperwiki'
-# require 'mechanize'
-#
-# agent = Mechanize.new
-#
-# # Read in a page
-# page = agent.get("http://foo.com")
-#
-# # Find somehing on the page using css selectors
-# p page.at('div.content')
-#
-# # Write out to the sqlite database using scraperwiki library
-# ScraperWiki.save_sqlite(["name"], {"name" => "susan", "occupation" => "software developer"})
-#
-# # An arbitrary query against the database
-# ScraperWiki.select("* from data where 'name'='peter'")
+require 'scraperwiki'
+require 'nokogiri'
+require 'date'
+require 'open-uri'
+require 'date'
+require 'csv'
 
-# You don't have to do things with the Mechanize or ScraperWiki libraries.
-# You can use whatever gems you want: https://morph.io/documentation/ruby
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
+# require 'colorize'
+# require 'pry'
+# require 'csv'
+# require 'open-uri/cached'
+# OpenURI::Cache.cache_path = '.cache'
+
+def noko_for(url)
+  Nokogiri::HTML(open(url).read) 
+end
+
+def unbracket(str)
+  cap = str.match(/^(.*?)\s*\((.*?)\)\s*$/) or return [str, '']
+  return cap.captures 
+end
+
+def scrape_list(url)
+  noko = noko_for(url)
+  count = 0
+  noko.css('div.content table tr').each do |row|
+    tds = row.css('td')
+    mp_url = URI.join(url, tds[1].at_css('a/@href').text).to_s
+    mp_noko = noko_for(mp_url)
+    data = { 
+      id: mp_url.split('/').last.split('.').first,
+      name: tds[1].css('a').text.strip,
+      constituency: tds[0].text.strip,
+      party: unbracket(tds[1].text.gsub(/[[:space:]]/, ' ').strip).last,
+      executive: tds[2].text.strip,
+      email: mp_noko.at_css('div.content a[href*=mailto]/@href').to_s.gsub(/[[:space:]]/, ' ').strip.sub('mailto:',''),
+      term: 2012,
+      source: mp_url,
+    }
+    data[:party_id] = data[:party]
+    data[:constituency].sub(/ C\*?/, ' Central')
+    data[:executive] = '' if data[:executive] == 'Backbencher'
+    puts data
+    count += 1
+  end
+  ScraperWiki.save_sqlite([:id, :term], data)
+  puts "Added #{count}"
+end
+
+term = {
+  id: 2012,
+  name: '2012–',
+  start_date: '2012-12-17',
+}
+ScraperWiki.save_sqlite([:id], term, 'terms')
+
+scrape_list('http://www.parliament.bm/Members_of_Parliament.aspx')
+
