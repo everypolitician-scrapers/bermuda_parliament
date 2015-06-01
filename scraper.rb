@@ -44,9 +44,9 @@ def scrape_list(url)
     data[:constituency].sub(/ C\*?/, ' Central')
     data[:executive] = '' if data[:executive] == 'Backbencher'
     puts data
+    ScraperWiki.save_sqlite([:id, :term], data)
     count += 1
   end
-  ScraperWiki.save_sqlite([:id, :term], data)
   puts "Added #{count}"
 end
 
