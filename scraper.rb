@@ -19,7 +19,7 @@ def noko_for(url)
 end
 
 def unbracket(str)
-  cap = str.match(/^(.*?)\s*\((.*?)\)\s*$/) or return [str, '']
+  cap = str.match(/^(.*?)\s*\((.*?)\)\s*$/) or return [str, 'Independent']
   return cap.captures 
 end
 
