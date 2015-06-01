@@ -31,7 +31,7 @@ def scrape_list(url)
     mp_url = URI.join(url, tds[1].at_css('a/@href').text).to_s
     mp_noko = noko_for(mp_url)
     data = { 
-      id: mp_url.split('/').last.split('.').first,
+      id: mp_url.split('/').last.sub('.aspx',''),
       name: tds[1].css('a').text.strip,
       constituency: tds[0].text.strip,
       party: unbracket(tds[1].text.gsub(/[[:space:]]/, ' ').strip).last,
