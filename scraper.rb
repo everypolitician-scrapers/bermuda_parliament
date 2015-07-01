@@ -33,7 +33,7 @@ def scrape_list(url)
     data = { 
       id: mp_url.split('/').last.sub('.aspx',''),
       name: tds[1].css('a').text.strip,
-      constituency: tds[0].text.strip,
+      area: tds[0].text.strip,
       party: unbracket(tds[1].text.gsub(/[[:space:]]/, ' ').strip).last,
       executive: tds[2].text.strip,
       email: mp_noko.at_css('div.content a[href*=mailto]/@href').to_s.gsub(/[[:space:]]/, ' ').strip.sub('mailto:',''),
@@ -41,7 +41,8 @@ def scrape_list(url)
       source: mp_url,
     }
     data[:party_id] = data[:party]
-    data[:constituency].sub!(/ C\*?$/, ' Central')
+    data[:area].sub!(/ C\*?$/, ' Central')
+    data[:area_id], data[:area] = data[:area].split(' - ', 2) if data[:area][/ - /]
     data[:executive] = '' if data[:executive] == 'Backbencher'
     puts data
     ScraperWiki.save_sqlite([:id, :term], data)
