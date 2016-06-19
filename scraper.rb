@@ -7,12 +7,12 @@ require 'date'
 require 'open-uri'
 require 'date'
 require 'csv'
+require 'pry'
 
 # require 'colorize'
-# require 'pry'
 # require 'csv'
-# require 'open-uri/cached'
-# OpenURI::Cache.cache_path = '.cache'
+require 'open-uri/cached'
+OpenURI::Cache.cache_path = '.cache'
 
 def noko_for(url)
   Nokogiri::HTML(open(url).read) 
@@ -38,13 +38,15 @@ def scrape_list(url)
       executive: tds[2].text.strip,
       email: mp_noko.at_css('div.content a[href*=mailto]/@href').to_s.gsub(/[[:space:]]/, ' ').strip.sub('mailto:',''),
       term: 2012,
+      image: mp_noko.css('li.PBItem div.content h1').xpath('./following::img[1]/@src').text,
       source: mp_url,
     }
     data[:party_id] = data[:party]
     data[:area].sub!(/ C\*?$/, ' Central')
     data[:area_id], data[:area] = data[:area].split(' - ', 2) if data[:area][/ - /]
     data[:executive] = '' if data[:executive] == 'Backbencher'
-    puts data
+    # sigh http://stackoverflow.com/questions/13013987/ruby-how-to-escape-url-with-square-brackets-and
+    data[:image] = URI.join(mp_url, URI.encode(URI.decode(data[:image])).gsub("[","%5B").gsub("]","%5D")).to_s unless data[:image].to_s.empty? 
     ScraperWiki.save_sqlite([:id, :term], data)
     count += 1
   end
