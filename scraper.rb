@@ -53,12 +53,5 @@ def scrape_list(url)
   puts "Added #{count}"
 end
 
-term = {
-  id: 2012,
-  name: '2012–',
-  start_date: '2012-12-17',
-}
-ScraperWiki.save_sqlite([:id], term, 'terms')
-
 scrape_list('http://www.parliament.bm/Members_of_Parliament.aspx')
 
