@@ -48,4 +48,5 @@ def scrape_list(url)
   puts "Added #{count}"
 end
 
+ScraperWiki.sqliteexecute('DELETE FROM data') rescue nil
 scrape_list('http://www.parliament.bm/Members_of_Parliament.aspx')
