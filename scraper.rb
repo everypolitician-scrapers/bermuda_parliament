@@ -2,9 +2,8 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-require 'nokogiri'
-require 'open-uri'
 require 'pry'
+require 'scraped'
 require 'scraperwiki'
 
 require 'open-uri/cached'
@@ -28,11 +27,11 @@ def scrape_list(url)
     mp_noko = noko_for(mp_url)
     data = {
       id:        mp_url.split('/').last.sub('.aspx', ''),
-      name:      tds[1].css('a').text.strip,
-      area:      tds[0].text.strip,
-      party:     unbracket(tds[1].text.gsub(/[[:space:]]/, ' ').strip).last,
-      executive: tds[2].text.strip,
-      email:     mp_noko.at_css('div.content a[href*=mailto]/@href').to_s.gsub(/[[:space:]]/, ' ').strip.sub('mailto:', ''),
+      name:      tds[1].css('a').text.tidy,
+      area:      tds[0].text.tidy,
+      party:     unbracket(tds[1].text.gsub(/[[:space:]]/, ' ').tidy).last,
+      executive: tds[2].text.tidy,
+      email:     mp_noko.at_css('div.content a[href*=mailto]/@href').to_s.gsub(/[[:space:]]/, ' ').tidy.sub('mailto:', ''),
       term:      2012,
       image:     mp_noko.css('li.PBItem div.content h1').xpath('./following::img[1]/@src').text,
       source:    mp_url,
