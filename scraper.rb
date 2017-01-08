@@ -1,16 +1,11 @@
 #!/bin/env ruby
 # encoding: utf-8
 
-require 'scraperwiki'
 require 'nokogiri'
-require 'date'
 require 'open-uri'
-require 'date'
-require 'csv'
 require 'pry'
+require 'scraperwiki'
 
-# require 'colorize'
-# require 'csv'
 require 'open-uri/cached'
 OpenURI::Cache.cache_path = '.cache'
 
