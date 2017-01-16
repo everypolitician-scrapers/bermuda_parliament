@@ -75,7 +75,8 @@ class MemberPage < Scraped::HTML
   decorator Scraped::Response::Decorator::AbsoluteUrls
 
   field :email do
-    noko.at_css('div.content a[href*=mailto]/@href').to_s.gsub(/[[:space:]]/, ' ').tidy.sub('mailto:', '')
+    # See https://github.com/everypolitician/scraped/issues/57
+    noko.at_css('div.content a[href*=mailto]/@href').to_s.sub('%C2%A0','').sub('mailto:', '').tidy
   end
 
   field :image do
