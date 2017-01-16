@@ -26,11 +26,11 @@ end
 
 class MemberRow < Scraped::HTML
   field :id do
-    source.split('/').last.sub('.aspx', '')
+    source.split('/').last.to_s.sub('.aspx', '')
   end
 
   field :name do
-    tds[1].css('a').text.tidy
+    tds[1].children.map(&:text).map(&:tidy).reject(&:empty?).first
   end
 
   field :area do
@@ -56,7 +56,7 @@ class MemberRow < Scraped::HTML
   end
 
   field :source do
-    tds[1].at_css('a/@href').text
+    tds[1].css('a/@href').text
   end
 
   private
@@ -91,7 +91,8 @@ end
 
 start = 'http://www.parliament.bm/Members_of_Parliament.aspx'
 data = scrape(start => MembersPage).members.map do |mem|
-  mem.to_h.merge(scrape(mem.source => MemberPage).to_h).merge(term: 2012)
+  member_page = mem.source.empty? ? {} : scrape(mem.source => MemberPage).to_h
+  mem.to_h.merge(member_page).merge(term: 2012)
 end
 # puts data.map { |r| r.sort_by { |k, _| k }.to_h }
 
