@@ -30,7 +30,7 @@ class MemberRow < Scraped::HTML
   end
 
   field :name do
-    tds[1].children.map(&:text).map(&:tidy).reject(&:empty?).first
+    name_and_party.first
   end
 
   field :area do
@@ -42,11 +42,11 @@ class MemberRow < Scraped::HTML
   end
 
   field :party_id do
-    unbracket(tds[1].text.tidy).last
+    name_and_party.last
   end
 
   field :party do
-    party_id
+    name_and_party.last
   end
 
   field :executive do
@@ -65,9 +65,10 @@ class MemberRow < Scraped::HTML
     noko.css('td')
   end
 
-  def unbracket(str)
-    cap = str.match(/^(.*?)\s*\((.*?)\)\s*$/) or return [str, 'Independent']
-    cap.captures
+  def name_and_party
+    text = tds[1].text.tidy
+    match = text.match(/(.*?) \((.*)\)/) or return [text, 'Independent']
+    match.captures
   end
 end
 
