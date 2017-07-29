@@ -93,7 +93,7 @@ end
 start = 'http://www.parliament.bm/Members_of_Parliament.aspx'
 data = scrape(start => MembersPage).members.map do |mem|
   member_page = mem.source.empty? ? {} : scrape(mem.source => MemberPage).to_h
-  mem.to_h.merge(member_page).merge(term: 2012)
+  mem.to_h.merge(member_page).merge(term: 2017)
 end
 data.each { |mem| puts mem.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h } if ENV['MORPH_DEBUG']
 
