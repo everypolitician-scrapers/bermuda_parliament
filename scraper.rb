@@ -15,7 +15,7 @@ def noko_for(url)
 end
 
 class MembersPage < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :members do
     noko.css('div.content table tr').map do |row|
@@ -73,7 +73,7 @@ class MemberRow < Scraped::HTML
 end
 
 class MemberPage < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
 
   field :email do
     # See https://github.com/everypolitician/scraped/issues/57
