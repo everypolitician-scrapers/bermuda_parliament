@@ -25,12 +25,18 @@ class MembersPage < Scraped::HTML
 end
 
 class MemberRow < Scraped::HTML
+  TITLES = %w(Colonel)
+
   field :id do
     source.split('/').last.to_s.sub('.aspx', '')
   end
 
   field :name do
-    name_and_party.first
+    name_parts.reject { |part| TITLES.include? part }.map(&:tidy).join(' ')
+  end
+
+  field :honorific_prefix do
+    name_parts.select { |part| TITLES.include? part }.map(&:tidy).join(';')
   end
 
   field :area do
@@ -69,6 +75,10 @@ class MemberRow < Scraped::HTML
     text = tds[1].text.tidy
     match = text.match(/(.*?) \((.*)\)/) or return [text, 'Independent']
     match.captures
+  end
+
+  def name_parts
+    name_and_party.first.split(' ')
   end
 end
 
