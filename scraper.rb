@@ -28,7 +28,8 @@ class MemberRow < Scraped::HTML
   TITLES = %w(Colonel)
 
   field :id do
-    source.split('/').last.to_s.sub('.aspx', '')
+    return name.tr(' ','_') if source.to_s.empty?
+    source.split('/').last.to_s.sub('.aspx', '').tidy
   end
 
   field :name do
