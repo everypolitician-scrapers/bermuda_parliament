@@ -49,11 +49,16 @@ class MemberRow < Scraped::HTML
   end
 
   field :party_id do
-    name_and_party.last
+    party
   end
 
   field :party do
-    name_and_party.last
+    party_str = name_and_party.last
+    return party_str unless party_str.to_s.empty?
+    # Scott Simmons has no party on the site currently, but is PLP:
+    #   https://elections.gov.bm/elections/results/electionresult/315.html
+    return 'PLP' if name == 'Scott Simmons'
+    return 'Independent'
   end
 
   field :executive do
@@ -74,7 +79,7 @@ class MemberRow < Scraped::HTML
 
   def name_and_party
     text = tds[1].text.tidy
-    match = text.match(/(.*?) \((.*)\)/) or return [text, 'Independent']
+    match = text.match(/(.*?) \((.*)\)/) or return [text, nil]
     match.captures
   end
 
