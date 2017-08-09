@@ -25,10 +25,10 @@ class MembersPage < Scraped::HTML
 end
 
 class MemberRow < Scraped::HTML
-  TITLES = %w(Colonel)
+  TITLES = %w[Colonel].freeze
 
   field :id do
-    return name.tr(' ','_') if source.to_s.empty?
+    return name.tr(' ', '_') if source.to_s.empty?
     source.split('/').last.to_s.sub('.aspx', '').tidy
   end
 
