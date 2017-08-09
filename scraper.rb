@@ -25,7 +25,7 @@ class MembersPage < Scraped::HTML
 end
 
 class MemberRow < Scraped::HTML
-  TITLES = %w[Colonel].freeze
+  TITLES = ['Colonel', 'Lt.', 'Col'].freeze
 
   field :id do
     return name.tr(' ', '_') if source.to_s.empty?
