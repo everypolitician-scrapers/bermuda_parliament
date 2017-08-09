@@ -33,11 +33,11 @@ class MemberRow < Scraped::HTML
   end
 
   field :name do
-    name_parts.reject { |part| TITLES.include? part }.map(&:tidy).join(' ')
+    prefixed_name.last.join(' ')
   end
 
   field :honorific_prefix do
-    name_parts.select { |part| TITLES.include? part }.map(&:tidy).join(';')
+    prefixed_name.first.join(' ')
   end
 
   field :area do
@@ -84,7 +84,11 @@ class MemberRow < Scraped::HTML
   end
 
   def name_parts
-    name_and_party.first.split(' ')
+    name_and_party.first.split(' ').compact.map(&:tidy)
+  end
+
+  def prefixed_name
+    name_parts.partition { |part| TITLES.include? part }
   end
 end
 
