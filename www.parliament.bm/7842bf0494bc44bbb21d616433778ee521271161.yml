@@ -26,19 +26,19 @@ response:
     X-Aspnet-Version:
     - 2.0.50727
     Set-Cookie:
-    - ASP.NET_SessionId=2diwn255mhlrst550kos1b2n; path=/; HttpOnly
-    - EkAnalytics=0; expires=Wed, 29-Aug-2018 04:55:30 GMT; path=/
-    - EktGUID=c76117ac-f1d1-4b8a-ad56-10efd8a09f75; expires=Wed, 29-Aug-2018 04:55:30
+    - ASP.NET_SessionId=d3xbe1azlqly5vv3j0rmq255; path=/; HttpOnly
+    - EkAnalytics=0; expires=Thu, 30-Aug-2018 19:19:04 GMT; path=/
+    - EktGUID=11ff8ab2-32e3-4ca8-9870-d7f009ba6219; expires=Thu, 30-Aug-2018 19:19:04
       GMT; path=/
     - ecm=user_id=0&isMembershipUser=0&site_id=&username=&new_site=/&unique_id=0&site_preview=0&langvalue=0&DefaultLanguage=1033&NavLanguage=1033&LastValidLanguageID=1033&DefaultCurrency=840&SiteCurrency=840&ContType=&UserCulture=1033&dm=www.parliament.bm&SiteLanguage=1033;
       path=/
     X-Powered-By:
     - ASP.NET
     Date:
-    - Tue, 29 Aug 2017 04:55:30 GMT
+    - Wed, 30 Aug 2017 19:19:04 GMT
     Content-Length:
     - '31781'
   body:
     encoding: ASCII-8BIT
   http_version: 
-recorded_at: Tue, 29 Aug 2017 04:55:09 GMT
+recorded_at: Wed, 30 Aug 2017 19:18:44 GMT
