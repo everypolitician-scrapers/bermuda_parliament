@@ -38,11 +38,11 @@ class MemberRow < Scraped::HTML
   end
 
   field :area do
-    tds[0].text.tidy.sub(/ C\*?$/, ' Central').split(' - ').last
+    area_parts.last
   end
 
   field :area_id do
-    tds[0].text.split(' - ').first.tidy
+    area_parts.first
   end
 
   field :party_id do
@@ -86,6 +86,10 @@ class MemberRow < Scraped::HTML
 
   def prefixed_name
     name_parts.partition { |part| TITLES.include? part }
+  end
+
+  def area_parts
+    tds[0].text.tidy.split(/-/).map(&:tidy)
   end
 end
 
