@@ -17,9 +17,7 @@ class MembersPage < Scraped::HTML
   decorator Scraped::Response::Decorator::CleanUrls
 
   field :members do
-    noko.css('div.content table tr').map do |row|
-      fragment row => MemberRow
-    end
+    noko.css('#content').xpath('.//table//tr[td]').map { |row| fragment(row => MemberRow) }
   end
 end
 
@@ -109,7 +107,7 @@ def scrape(h)
   klass.new(response: Scraped::Request.new(url: url).response)
 end
 
-start = 'http://www.parliament.bm/Members_of_Parliament.aspx'
+start = 'http://parliament.bm/about/view/7'
 data = scrape(start => MembersPage).members.map do |mem|
   member_page = mem.source.empty? ? {} : scrape(mem.source => MemberPage).to_h
   mem.to_h.merge(member_page).merge(term: 2017)
