@@ -42,7 +42,7 @@ class MemberRow < Scraped::HTML
   end
 
   field :area_id do
-    area_parts.first
+    area_parts.first.sub('Constituency ','').tidy
   end
 
   field :party_id do
